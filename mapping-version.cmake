@@ -1,7 +1,7 @@
 
 function(version fileversion constant)
 
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" version)
+file(STRINGS "${MAPPING_VERSION_FULL_PATH}" version)
 
 message(STATUS "Create ${fileversion} with version ${version}")	
 
