@@ -59,9 +59,11 @@ function(getDependencies dependencies_file)
 		
 		if(NOT DEFINED ${CURLIBS_FOLDER}_INCLUDES)
 			set (${CURLIBS_FOLDER}_INCLUDES ${PATH_DEPENDENCIES}/${libname}/include PARENT_SCOPE)
+		endif()
 			
 		if(NOT DEFINED ${CURLIBS_FOLDER}_LIBS)
 			set (${CURLIBS_FOLDER}_LIBS ${PATH_DEPENDENCIES}/${libname}/lib PARENT_SCOPE)
+		endif()
 
 
 	endforeach()
