@@ -1,0 +1,52 @@
+
+
+INSTALL (
+    DIRECTORY ${MAPPING_LIB_ROOT_PATH}/${MAPPING_LIB_NAME}
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/install/${MAPPING_LIB_NAME}/include
+    FILES_MATCHING PATTERN "*.h"
+	)
+	
+if (CMAKE_HOST_WIN32)
+	
+	INSTALL (
+		DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/$<CONFIGURATION>/
+		DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/install/${MAPPING_LIB_NAME}/lib
+		FILES_MATCHING
+		PATTERN "*.dll" 
+		)
+		
+	INSTALL (
+		DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/$<CONFIGURATION>/
+		DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/install/${MAPPING_LIB_NAME}/lib
+		FILES_MATCHING 
+		PATTERN "*.lib" 
+		)
+	
+else()
+
+	INSTALL (
+		DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/
+		DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/install/${MAPPING_LIB_NAME}/lib
+		FILES_MATCHING 
+		PATTERN "*.so*"
+		)
+		
+	INSTALL (
+		DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/
+		DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/install/${MAPPING_LIB_NAME}/lib
+		FILES_MATCHING 
+		PATTERN "*.a"
+		)
+	
+endif()
+	
+install(CODE "MESSAGE(\"Packaging Install...\")")
+install(CODE "execute_process(COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/${MAPPING_LIB_NAME}.tar.gz --directory=${CMAKE_CURRENT_SOURCE_DIR}/install ${MAPPING_LIB_NAME})")
+install(CODE "execute_process(COMMAND rm -rf ${CMAKE_CURRENT_SOURCE_DIR}/install/${MAPPING_LIB_NAME})")
+if (CMAKE_HOST_WIN32)
+	install(CODE "execute_process(COMMAND \"C:\\\\Program Files\\\\7-Zip\\\\7z\" a -tzip \"${CMAKE_CURRENT_SOURCE_DIR}\\\\${MAPPING_BIN_NAME}.zip\" \"${CMAKE_CURRENT_SOURCE_DIR}\\\\bin\\\\Release\\\\${MAPPING_BIN_NAME}.exe\")")
+else()
+	install(CODE "execute_process(COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/${MAPPING_BIN_NAME}.tar.gz --directory=${CMAKE_CURRENT_SOURCE_DIR}/bin ${MAPPING_BIN_NAME})")
+endif()
+install(CODE "MESSAGE(\"Packaging Install done.\")")
+###  end install target
