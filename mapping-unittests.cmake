@@ -15,6 +15,8 @@ include_directories(${CATCH2_INCLUDE})
 	
 enable_testing()
 
+add_custom_target(BUILD_TESTS)
+
 
 function(addtest)
 
@@ -60,6 +62,8 @@ function(addtest)
 			NAME ${name} 
 			COMMAND $<TARGET_FILE:${name}> "--success"
 			)
+			
+	add_dependencies(BUILD_TESTS ${name})
 	
 	
 	
