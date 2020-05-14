@@ -13,7 +13,7 @@ set(CATCH2_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/catch2)
 
 include_directories(${CATCH2_INCLUDE})
 	
-enable_testing()
+include(CTest)
 
 add_custom_target(BUILD_TESTS)
 
