@@ -20,13 +20,14 @@ add_custom_target(BUILD_TESTS)
 
 function(addtest)
 
+	set(oneValueArgs LIB SRC)
+    set(multiValueArgs DEP)
 	cmake_parse_arguments(
         PARSED_ARGS # prefix of output variables
-        "" # list of names of the boolean arguments (only defined ones will be true)
-        "LIB" # NAME of the lib to test
-        "SRC" # Sources of the test
-		"DEPLIB" # Dependances
-        ${ARGN} # arguments of the function to parse, here we take the all original ones
+		""
+        "${oneValueArgs}"
+        "${multiValueArgs}" 
+		${ARGN} 
     )
 	
 	if(NOT TEST_OUTPUT_DIRECTORY)
@@ -43,9 +44,9 @@ function(addtest)
     endif(NOT PARSED_ARGS_SRC)
 	set(src ${PARSED_ARGS_SRC})
 	
-	foreach(lib ${PARSED_ARGS_DEPLIB})
+	foreach(deplib ${PARSED_ARGS_DEP})
 		list(APPEND dep_libs ${deplib})
-    endforeach(lib)
+    endforeach(deplib)
 
 	set(name "UT_${lib}")
 
