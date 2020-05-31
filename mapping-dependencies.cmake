@@ -1,8 +1,17 @@
 set (MAPPING_LIBS_BASE_URL "http://${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD}@${ARTIFACTORY_IP}/artifactory/Onyx/Libs")
 
+
+# Get OS name (+ Visual Studio version)
 if (CMAKE_HOST_WIN32)
-	set (OSNAME "win64")
-	set (LIBS_FOLDER "Win64")
+	if(${MSVC_TOOLSET_VERSION} STREQUAL  "141")
+		set (VS "vs2017")
+	elseif(${MSVC_TOOLSET_VERSION} STREQUAL  "140")
+		set (VS "vs2015")
+	elseif(${MSVC_TOOLSET_VERSION} STREQUAL  "120")
+		set (VS "vs2013")
+	endif()
+	set (OSNAME "win64-${VS}")
+	set (LIBS_FOLDER "Win_x64")
 else()
 	execute_process(COMMAND cat /etc/os-release COMMAND grep "VERSION_ID" COMMAND cut -d \" -f2 OUTPUT_VARIABLE OSNAME)
 	string(STRIP el${OSNAME} OSNAME)
@@ -10,11 +19,15 @@ else()
 	set(LIBS_FOLDER ${LIBS_FOLDER}_x64)
 endif()
 
+
+# Create folder
 set(PATH_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 
 file(MAKE_DIRECTORY ${PATH_DEPENDENCIES})
 file(MAKE_DIRECTORY download)
 
+
+# Function getDependencies
 function(getDependencies dependencies_file)
 
 	FILE(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/${dependencies_file} libs)
@@ -31,14 +44,14 @@ function(getDependencies dependencies_file)
 		message(STATUS "Lib Version = ${libversion}")
 
 		if(NOT EXISTS "${PATH_DEPENDENCIES}/${libname}/include")
-			set(LIBURL ${MAPPING_LIBS_BASE_URL}/${LIBS_FOLDER}/${libname}_${OSNAME}_${libversion}.tar.gz)
+			set(LIBURL ${MAPPING_LIBS_BASE_URL}/${LIBS_FOLDER}/${libname}-${OSNAME}-${libversion}.tar.gz)
 			message(STATUS "Download Lib ${libname} from ${LIBURL} ...")
-			file(DOWNLOAD ${LIBURL} download/${libname}_${OSNAME}_${libversion}.tar.gz STATUS http_messages)
+			file(DOWNLOAD ${LIBURL} download/${libname}-${OSNAME}-${libversion}.tar.gz STATUS http_messages)
 			list(GET http_messages 0 http_code)
 			
 			if(NOT ${http_code})
 				message(STATUS "Install Lib ${libname} ...")
-				execute_process(COMMAND tar xzf download/${libname}_${OSNAME}_${libversion}.tar.gz -C ${PATH_DEPENDENCIES})
+				execute_process(COMMAND tar xzf download/${libname}-${OSNAME}-${libversion}.tar.gz -C ${PATH_DEPENDENCIES})
 				
 				if(EXISTS "${PATH_DEPENDENCIES}/${libname}")
 					message(STATUS "Lib ${libname} installed.")
