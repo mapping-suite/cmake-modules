@@ -3,7 +3,9 @@ set (MAPPING_LIBS_BASE_URL "http://${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD}@$
 
 # Get OS name (+ Visual Studio version)
 if (CMAKE_HOST_WIN32)
-	if(${MSVC_TOOLSET_VERSION} STREQUAL  "141")
+	if(${MSVC_TOOLSET_VERSION} STREQUAL  "143")
+		set (VS "vs2022")
+	elseif(${MSVC_TOOLSET_VERSION} STREQUAL  "141")
 		set (VS "vs2017")
 	elseif(${MSVC_TOOLSET_VERSION} STREQUAL  "140")
 		set (VS "vs2015")
