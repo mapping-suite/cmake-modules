@@ -1,4 +1,5 @@
-set (MAPPING_LIBS_BASE_URL "http://${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD}@${ARTIFACTORY_IP}/artifactory/Onyx/Libs")
+# Artifactory access is now based on a hashed password (called key), no more clear password
+set (MAPPING_LIBS_BASE_URL "http://${ARTIFACTORY_USER}:${ARTIFACTORY_KEY}@${ARTIFACTORY_IP}/artifactory/Onyx/Libs")
 
 
 # Get OS name (+ Visual Studio version)
